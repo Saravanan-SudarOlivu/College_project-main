@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>About Us | S4learnHub</title>
+<style>
+:root {
+  --primary: #38bdf8;
+  --secondary: #818cf8;
+  --bg: #030712;
+  --glass: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --text: #f8fafc;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', system-ui, sans-serif; }
+
+body { 
+    background: var(--bg); 
+    color: var(--text); 
+    overflow-x: hidden;
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(129, 140, 248, 0.05) 0%, transparent 40%);
+    min-height: 100vh;
+}
+
+.dynamic-bg { position: fixed; inset: 0; z-index: -2; }
+.dynamic-bg::before { content: ""; position: absolute; inset: -8%; background: radial-gradient(1200px 800px at 20% 30%, rgba(56,189,248,0.08), transparent 60%), radial-gradient(900px 700px at 80% 70%, rgba(129,140,248,0.08), transparent 60%), conic-gradient(from 180deg at 50% 50%, rgba(56,189,248,0.06), rgba(129,140,248,0.06), rgba(52,211,153,0.05), rgba(56,189,248,0.06)); filter: blur(2px); animation: bgShift 18s linear infinite; }
+.dynamic-bg::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05), transparent 40%); animation: glowPulse 6s ease-in-out infinite alternate; }
+.fshape { position: fixed; width: 280px; height: 280px; border-radius: 40% 60% 50% 50% / 40% 60% 50% 60%; filter: blur(50px); opacity: 0.12; z-index: -1; animation: floatBlob 22s infinite ease-in-out; }
+.fshape.one { background: #38bdf8; top: 12%; left: 8%; }
+.fshape.two { background: #818cf8; bottom: 8%; right: 10%; animation-delay: -5s; }
+.fshape.three { background: #34d399; top: 65%; left: 70%; animation-delay: -10s; }
+@keyframes bgShift { 0% { transform: translate3d(0,0,0) scale(1); } 50% { transform: translate3d(20px,-20px,0) scale(1.02); } 100% { transform: translate3d(0,0,0) scale(1); } }
+@keyframes glowPulse { 0% { opacity: 0.25; } 100% { opacity: 0.55; } }
+@keyframes floatBlob { 0%,100% { transform: translateY(0) scale(1) rotate(0deg); } 33% { transform: translateY(-30px) scale(1.05) rotate(120deg); } 66% { transform: translateY(15px) scale(0.98) rotate(240deg); } }
+
+header {
+  position: sticky; top: 0; z-index: 1000;
+  background: rgba(3, 7, 18, 0.8);
+  backdrop-filter: blur(12px); padding: 20px 50px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.logo { 
+    font-size: 28px; font-weight: 900; 
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    text-decoration: none;
+}
+
+nav a { 
+    margin-left: 25px; text-decoration: none; color: var(--text); 
+    font-size: 14px; font-weight: 500; transition: 0.3s; opacity: 0.7;
+}
+
+nav a:hover { opacity: 1; color: var(--primary); }
+
+.hero {
+    text-align: center; padding: 100px 20px 60px;
+}
+
+.hero h1 { 
+    font-size: 56px; margin-bottom: 20px; letter-spacing: -1px; 
+    background: linear-gradient(135deg, var(--primary), var(--secondary)); 
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    opacity: 0; transform: translateY(30px); animation: fadeInUp 0.8s forwards;
+    position: relative;
+}
+.hero h1::after {
+    content: ""; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+    width: 0; height: 3px; background: linear-gradient(90deg, var(--primary), var(--secondary));
+    animation: underlineExpand 1s 0.6s forwards ease-out;
+}
+
+.wrapper {
+    max-width: 1100px; margin: 0 auto; padding: 20px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;
+}
+
+.about-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 32px; padding: 45px;
+    backdrop-filter: blur(20px);
+    opacity: 0; transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+.reveal { opacity: 1; transform: translateY(0); }
+
+.about-card h3 { 
+    color: var(--primary); font-size: 24px; margin-bottom: 20px; 
+    display: flex; align-items: center; gap: 12px;
+}
+
+.about-card p { color: #94a3b8; line-height: 1.8; font-size: 16px; }
+
+.about-card::before {
+    content: ""; position: absolute; inset: -2px;
+    border-radius: 34px; padding: 2px;
+    background: linear-gradient(45deg, rgba(56,189,248,0.2), rgba(129,140,248,0.2));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    opacity: 0; transition: opacity 0.4s;
+}
+.about-card:hover::before { opacity: 1; }
+.about-card:hover { transform: translateY(-6px); border-color: var(--primary); }
+
+.orb { position: fixed; width: 320px; height: 320px; border-radius: 50%; filter: blur(80px); opacity: 0.12; z-index: -1; animation: drift 18s infinite alternate; }
+.orb-1 { background: var(--primary); top: -100px; left: -120px; }
+.orb-2 { background: var(--secondary); bottom: -120px; right: -120px; animation-delay: -6s; }
+@keyframes drift { from { transform: translate(0,0); } to { transform: translate(80px,80px); } }
+
+@keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+@keyframes underlineExpand { to { width: 180px; } }
+
+footer { padding: 60px 20px; text-align: center; color: #4b5563; border-top: 1px solid var(--glass-border); margin-top: 60px; }
+
+@media (max-width: 768px) {
+    header { padding: 20px; }
+    .hero h1 { font-size: 36px; }
+    .wrapper { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="dynamic-bg"></div>
+<div class="fshape one"></div>
+<div class="fshape two"></div>
+<div class="fshape three"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<header>
+  <a href="index.html" class="logo">S4learnHub</a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="login.html">Login</a>
+  </nav>
+</header>
+
+<div class="hero">
+    <h1>Our Story.</h1>
+    <p style="color: var(--primary); letter-spacing: 1px; font-weight: 600; text-transform: uppercase;">Innovation meets Collaboration</p>
+</div>
+
+<div class="wrapper">
+    <div class="about-card">
+        <h3>🚀 Our Mission</h3>
+        <p>At S4learnHub, we bridge the gap between classroom learning and real-world collaboration. We empower students to connect and grow together in a secure environment.</p>
+    </div>
+
+    <div class="about-card">
+        <h3>💡 Our Vision</h3>
+        <p>We focus on real-time interaction. Our EduChat Ultra technology allows for instant file sharing and problem-solving, making learning significantly more effective.</p>
+    </div>
+
+    <div class="about-card">
+        <h3>🛠️ Our Tech</h3>
+        <p>We leverage modern web standards and high-performance cloud tools to ensure your data is secure and your messages are delivered instantly for a seamless experience.</p>
+    </div>
+</div>
+
+<footer>
+    <p>© 2026 S4learnHub. Building the future of education.</p>
+</footer>
+
+<script>
+// Staggered Reveal Animation matching the Contact page logic
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+            setTimeout(() => {
+                entry.target.classList.add('reveal');
+            }, index * 200); // 200ms stagger
+        }
+    });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.about-card').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

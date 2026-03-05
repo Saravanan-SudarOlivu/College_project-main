@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S4LearnHub | Premium Learning</title>
+    <script src="https://8x8.vc/vpaas-magic-cookie-363673327d754388907336f33d79047b/external_api.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root { 
+            --primary: #7000ff; 
+            --secondary: #00c6ff;
+            --bg: #05070a; 
+            --surface: rgba(255, 255, 255, 0.05);
+            --text: #ffffff; 
+            --danger: #ff3b30;
+        }
+
+        * { box-sizing: border-box; }
+
+        body { 
+            margin: 0; 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg);
+            background-image: linear-gradient(rgba(5, 7, 10, 0.85), rgba(5, 7, 10, 0.85)), 
+                              url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text); 
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Main App */
+        #main-app { display: none; flex-direction: column; height: 100vh; animation: fadeInUp 0.6s ease-out; }
+
+        .header { 
+            padding: 20px 40px; background: var(--surface); backdrop-filter: blur(15px);
+            display: flex; justify-content: space-between; align-items: center; 
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .btn-live { 
+            background: linear-gradient(45deg, var(--primary), var(--secondary)); 
+            border: none; color: white; padding: 12px 28px; border-radius: 14px; 
+            cursor: pointer; font-weight: 600; transition: all 0.3s ease;
+        }
+        
+        #meeting-id-input {
+            padding: 12px 20px; border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05);
+            color: white; outline: none;
+        }
+
+        /* Invite Box */
+        #invite-box { 
+            background: rgba(112, 0, 255, 0.1); backdrop-filter: blur(10px);
+            padding: 15px 25px; border-radius: 16px; margin: 20px 40px; 
+            display: none; align-items: center; gap: 15px; border: 1px dashed var(--primary);
+        }
+
+        /* Video Modal & New Bottom Bar */
+        #video-modal { display: none; position: fixed; inset: 0; background: #000; z-index: 4000; flex-direction: column; }
+        
+        #meet-frame { flex: 1; width: 100%; }
+
+        .video-controls {
+            height: 80px;
+            background: rgba(15, 18, 24, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            z-index: 4100;
+        }
+
+        .btn-end {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 50px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 59, 48, 0.3);
+        }
+
+        .btn-end:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(255, 59, 48, 0.6);
+            background: #ff2d20;
+        }
+
+        #chat-stream { flex: 1; overflow-y: auto; padding: 40px; display: flex; flex-direction: column; gap: 20px; }
+        .msg { padding: 14px 20px; border-radius: 18px; max-width: 60%; backdrop-filter: blur(5px); }
+        .me { background: var(--primary); align-self: flex-end; }
+        .other { background: rgba(255, 255, 255, 0.1); align-self: flex-start; }
+    </style>
+</head>
+<body>
+    <!-- Authenticated User (from Flask session) -->
+    <script>
+        const currentUser = "{{ user_name }}";
+    </script>
+
+    <div id="main-app" style="display: flex;">
+        <div class="header">
+            <div style="font-weight: 800; font-size: 1.5rem;">S4<span style="color: var(--secondary);">LearnHub</span></div>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="meeting-id-input" placeholder="Enter Meeting ID" style="margin:0; width: 180px;">
+                <button class="btn-live" onclick="joinMeeting()">Join Meeting</button>
+                <button class="btn-live" onclick="startMeeting()">🚀 Start New</button>
+            </div>
+        </div>
+
+        <div id="invite-box">
+            <span style="color: var(--text);">Meeting ID: </span>
+            <input type="text" id="share-link" readonly style="background:transparent; border:none; color:var(--secondary); flex:1; font-weight: bold;">
+            <button onclick="copyLink()" style="background:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">Copy</button>
+        </div>
+
+        <div id="chat-stream">
+            <div class="msg other">Welcome, {{ user_name }}! Start a new meeting or enter an ID to join.</div>
+        </div>
+    </div>
+
+    <div id="video-modal">
+        <div id="meet-frame"></div>
+        <div class="video-controls">
+            <button class="btn-end" onclick="endMeeting()">✕ End Session</button>
+        </div>
+    </div>
+
+<script>
+    let jitsi = null;
+
+    function startMeeting() {
+        const roomName = "S4LearnHub_" + Math.floor(Math.random() * 999999);
+        launchJitsi(roomName);
+        showInvite(roomName);
+    }
+
+    function joinMeeting() {
+        const roomInput = document.getElementById("meeting-id-input").value.trim();
+        if (roomInput) {
+            launchJitsi(roomInput);
+            showInvite(roomInput);
+        } else {
+            alert("Please enter a valid Meeting ID");
+        }
+    }
+
+    function launchJitsi(roomName) {
+        const modal = document.getElementById("video-modal");
+        modal.style.display = "flex";
+
+        if (jitsi) jitsi.dispose();
+
+        jitsi = new JitsiMeetExternalAPI("meet.jit.si", {
+            roomName: roomName,
+            parentNode: document.querySelector('#meet-frame'),
+            userInfo: { displayName: currentUser },
+            configOverwrite: { startWithAudioMuted: true, startWithVideoMuted: true }
+        });
+    }
+
+    function showInvite(roomName) {
+        const inviteBox = document.getElementById("invite-box");
+        inviteBox.style.display = "flex";
+        document.getElementById("share-link").value = roomName;
+    }
+
+    function endMeeting() {
+        const modal = document.getElementById("video-modal");
+        modal.style.display = "none";
+        if (jitsi) {
+            jitsi.dispose();
+            jitsi = null;
+        }
+        document.getElementById("invite-box").style.display = "none";
+    }
+
+    function copyLink() {
+        const copyText = document.getElementById("share-link");
+        copyText.select();
+        document.execCommand("copy");
+        alert("Meeting ID copied to clipboard!");
+    }
+</script>
+</body>
+</html>

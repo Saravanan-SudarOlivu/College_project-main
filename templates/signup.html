@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up | S4learnHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --primary: #38bdf8;
+      --secondary: #818cf8;
+      --accent: #34d399;
+      --bg: #030712;
+      --glass: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --text: #f8fafc;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(129, 140, 248, 0.08) 0%, transparent 40%);
+    }
+
+    .dynamic-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+    }
+
+    .dynamic-bg::before {
+      content: "";
+      position: absolute;
+      inset: -8%;
+      background: radial-gradient(1200px 800px at 25% 35%, rgba(56, 189, 248, 0.08), transparent 60%), radial-gradient(900px 700px at 75% 65%, rgba(129, 140, 248, 0.08), transparent 60%), conic-gradient(from 180deg at 50% 50%, rgba(56, 189, 248, 0.06), rgba(129, 140, 248, 0.06), rgba(52, 211, 153, 0.05), rgba(56, 189, 248, 0.06));
+      filter: blur(2px);
+      animation: bgShift 18s linear infinite;
+    }
+
+    .dynamic-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05), transparent 40%);
+      animation: glowPulse 6s ease-in-out infinite alternate;
+    }
+
+    .fshape {
+      position: fixed;
+      width: 280px;
+      height: 280px;
+      border-radius: 40% 60% 50% 50% / 40% 60% 50% 60%;
+      filter: blur(50px);
+      opacity: 0.12;
+      z-index: -1;
+      animation: floatBlob 22s infinite ease-in-out;
+    }
+
+    .fshape.one {
+      background: #38bdf8;
+      top: 14%;
+      left: 10%;
+    }
+
+    .fshape.two {
+      background: #818cf8;
+      bottom: 12%;
+      right: 8%;
+      animation-delay: -5s;
+    }
+
+    .fshape.three {
+      background: #34d399;
+      top: 68%;
+      left: 72%;
+      animation-delay: -10s;
+    }
+
+    @keyframes bgShift {
+      0% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+
+      50% {
+        transform: translate3d(20px, -20px, 0) scale(1.02);
+      }
+
+      100% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+    }
+
+    @keyframes glowPulse {
+      0% {
+        opacity: 0.25;
+      }
+
+      100% {
+        opacity: 0.55;
+      }
+    }
+
+    @keyframes floatBlob {
+
+      0%,
+      100% {
+        transform: translateY(0) scale(1) rotate(0deg);
+      }
+
+      33% {
+        transform: translateY(-30px) scale(1.05) rotate(120deg);
+      }
+
+      66% {
+        transform: translateY(15px) scale(0.98) rotate(240deg);
+      }
+    }
+
+    .orb {
+      position: fixed;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.15;
+      z-index: -1;
+      animation: drift 20s infinite alternate;
+    }
+
+    .orb-1 {
+      background: var(--primary);
+      top: -100px;
+      left: -100px;
+    }
+
+    .orb-2 {
+      background: var(--secondary);
+      bottom: -100px;
+      right: -100px;
+      animation-delay: -5s;
+    }
+
+    @keyframes drift {
+      from {
+        transform: translate(0, 0);
+      }
+
+      to {
+        transform: translate(100px, 100px);
+      }
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(3, 7, 18, 0.8);
+      backdrop-filter: blur(12px);
+      padding: 20px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 900;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+
+    nav a {
+      margin-left: 25px;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 500;
+      transition: 0.3s;
+      opacity: 0.7;
+    }
+
+    nav a:hover {
+      opacity: 1;
+      color: var(--primary);
+    }
+
+    .container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .card {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      padding: 40px;
+      border-radius: 32px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s forwards;
+      position: relative;
+    }
+
+    .card h2 {
+      font-size: 32px;
+      margin-bottom: 10px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .card p {
+      color: #94a3b8;
+      margin-bottom: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: #cbd5e1;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 14px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: white;
+      font-size: 16px;
+      transition: 0.3s;
+      transform: translateZ(0);
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+    }
+
+    .btn-signup {
+      width: 100%;
+      padding: 16px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      color: white;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.4s;
+      margin-top: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-signup:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(56, 189, 248, 0.2);
+    }
+
+    .btn-signup::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+      transition: left 0.6s;
+    }
+
+    .btn-signup:hover::after {
+      left: 100%;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: 34px;
+      padding: 2px;
+      background: linear-gradient(45deg, rgba(56, 189, 248, 0.2), rgba(129, 140, 248, 0.2));
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 14px;
+      color: #94a3b8;
+    }
+
+    .footer-note a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    footer {
+      padding: 40px;
+      text-align: center;
+      color: #4b5563;
+      border-top: 1px solid var(--glass-border);
+    }
+
+    @media(max-width:1000px) {
+      header {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="dynamic-bg"></div>
+  <div class="fshape one"></div>
+  <div class="fshape two"></div>
+  <div class="fshape three"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <header>
+    <a href="index.html" class="logo">S4learnHub</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html">Login</a>
+    </nav>
+  </header>
+  <main class="container">
+    <div class="card">
+      <h2>Create Your Account</h2>
+      <p>Join S4learnHub to collaborate and learn smarter together.</p>
+      <form method="post" action="/signup">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" name="name" placeholder="Enter the Your Name" required>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" name="email" placeholder="Enter the Email" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" name="password" placeholder="Create a strong password" required>
+        </div>
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input type="password" name="confirm_password" placeholder="Re-enter your password" required>
+        </div>
+        <div class="form-group">
+          <label>Role</label>
+          <select name="role" class="input-field"
+            style="padding:12px; border-radius:12px; background: rgba(255,255,255,0.05); border:1px solid var(--glass-border); color:#fff;">
+            <option value="student">Student</option>
+            <option value="staff">Staff</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-signup">Sign Up</button>
+      </form>
+      <div class="footer-note">
+        Already have an account? <a href="login.html">Log in</a>
+      </div>
+    </div>
+  </main>
+  <footer>© 2026 S4learnHub. Innovating Education.</footer>
+</body>
+
+</html>

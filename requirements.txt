@@ -1,0 +1,6 @@
+flask
+flask-socketio
+werkzeug
+flask-sqlalchemy
+psycopg2-binary
+python-dotenv

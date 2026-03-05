@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Access Denied | S4learnHub Pro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root {
+  --primary: #38bdf8;
+  --secondary: #818cf8;
+  --bg: #030712;
+  --glass: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --text: #f8fafc;
+}
+
+/* Base Styles */
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', system-ui, sans-serif; }
+
+body { 
+    background: var(--bg); 
+    color: var(--text); 
+    overflow: hidden;
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(129, 140, 248, 0.08) 0%, transparent 40%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Navigation (Matches Pro Style) --- */
+header {
+  position: sticky; top: 0; z-index: 1000;
+  background: rgba(3, 7, 18, 0.8);
+  backdrop-filter: blur(12px); padding: 20px 50px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.logo { 
+    font-size: 28px; font-weight: 900; 
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    text-decoration: none;
+}
+
+nav a { 
+    margin-left: 25px; text-decoration: none; color: var(--text); 
+    font-size: 14px; font-weight: 500; transition: 0.3s; opacity: 0.7;
+}
+
+nav a:hover { opacity: 1; color: var(--primary); }
+
+/* --- Error Wrapper --- */
+.error-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.wrap {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 32px; padding: 60px 40px;
+    backdrop-filter: blur(25px);
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    opacity: 0; transform: translateY(30px);
+    animation: revealIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* --- Animated Icon --- */
+.error-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    display: inline-block;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+h2 { font-size: 36px; margin-bottom: 15px; letter-spacing: -1px; }
+.muted { color: #94a3b8; font-size: 18px; margin-bottom: 30px; line-height: 1.6; }
+
+/* --- Glowing Button --- */
+a.btn {
+    display: inline-block;
+    padding: 16px 32px;
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    color: #fff;
+    border-radius: 16px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 16px;
+    transition: 0.4s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+a.btn:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(56, 189, 248, 0.4);
+}
+
+/* --- Animations --- */
+@keyframes revealIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+footer { padding: 40px; text-align: center; color: #4b5563; border-top: 1px solid var(--glass-border); }
+
+@media (max-width: 768px) {
+    header { padding: 20px; }
+    .wrap { padding: 40px 20px; }
+    h2 { font-size: 28px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">S4learnHub</a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="login.html">Login</a>
+  </nav>
+</header>
+
+<div class="error-container">
+    <div class="wrap">
+        <div class="error-icon">🔒</div>
+        <h2>Access Restricted</h2>
+        <p class="muted">This zone is restricted to authorized personnel. Please sign in to unlock the platform's full potential.</p>
+        <a class="btn" href="index.html">Return to Safety</a>
+    </div>
+</div>
+
+<footer>
+    <p>© 2026 S4learnHub. Building the future of education.</p>
+</footer>
+
+</body>
+</html>

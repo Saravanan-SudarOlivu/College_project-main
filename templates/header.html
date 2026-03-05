@@ -1,0 +1,46 @@
+<style>
+/* Glassmorphism Header */
+header {
+  position: sticky; top: 0; z-index: 1000;
+  background: rgba(3, 7, 18, 0.8);
+  backdrop-filter: blur(12px); padding: 20px 50px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  animation: slideDown 0.6s ease-out;
+}
+
+.logo { 
+    font-size: 28px; font-weight: 900; 
+    background: linear-gradient(to right, #38bdf8, #818cf8);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    text-decoration: none;
+    letter-spacing: -1px;
+}
+
+nav a { 
+    margin-left: 25px; text-decoration: none; color: #f8fafc; 
+    font-size: 14px; font-weight: 500; transition: 0.3s; opacity: 0.7;
+}
+
+nav a:hover { opacity: 1; color: #38bdf8; text-shadow: 0 0 8px rgba(56, 189, 248, 0.5); }
+
+@keyframes slideDown {
+    from { transform: translateY(-100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@media (max-width: 768px) {
+    header { padding: 15px 20px; }
+    nav a { margin-left: 15px; font-size: 13px; }
+}
+</style>
+
+<header>
+  <a href="index.html" class="logo">S4learnHub</a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="login.html">Login</a>
+  </nav>
+</header>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Profile | S4learnHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --primary: #38bdf8;
+      --secondary: #818cf8;
+      --bg: #030712;
+      --glass: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --text: #f8fafc;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(3, 7, 18, 0.8);
+      backdrop-filter: blur(12px);
+      padding: 20px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 900;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+
+    nav a {
+      margin-left: 25px;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 500;
+      transition: 0.3s;
+      opacity: 0.7;
+    }
+
+    nav a:hover {
+      opacity: 1;
+      color: var(--primary);
+    }
+
+    .container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .card {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      padding: 32px;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 560px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    .card h2 {
+      font-size: 28px;
+      margin-bottom: 16px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: #cbd5e1;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.2);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      transition: 0.3s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border: 1px solid var(--glass-border);
+    }
+
+    .status {
+      margin-top: 10px;
+      color: #94a3b8;
+      font-size: 13px;
+      min-height: 18px;
+    }
+
+    footer {
+      padding: 24px;
+      text-align: center;
+      color: #4b5563;
+      border-top: 1px solid var(--glass-border);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <a href="/index" class="logo">S4learnHub</a>
+    <nav>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/chat">Chat</a>
+      <a href="/logout">Logout</a>
+    </nav>
+  </header>
+  <main class="container">
+    <div class="card">
+      <h2>Profile & Settings</h2>
+      <form id="profileForm">
+        <div class="form-group">
+          <label>Name</label>
+          <input class="input-field" name="name" value="{{ user.name }}">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input class="input-field" name="email" value="{{ user.email }}">
+        </div>
+        <div class="form-group">
+          <label>Role</label>
+          <input class="input-field" value="{{ user.role }}" disabled>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn btn-primary" onclick="updateProfile()">Save Changes</button>
+          <a class="btn btn-secondary" href="/logout">Logout</a>
+        </div>
+        <div id="status" class="status"></div>
+      </form>
+    </div>
+  </main>
+  <footer>© 2026 S4learnHub. Innovating Education.</footer>
+  <script>
+    async function updateProfile() {
+      const form = document.getElementById('profileForm');
+      const formData = new FormData(form);
+      const res = await fetch('/update_profile', { method: 'POST', body: formData });
+      const data = await res.json();
+      const status = document.getElementById('status');
+      if (data.error) {
+        status.textContent = data.error;
+      } else {
+        status.textContent = data.message;
+      }
+    }
+  </script>
+</body>
+
+</html>
