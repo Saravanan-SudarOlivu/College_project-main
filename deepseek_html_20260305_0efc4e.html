@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign in · S4learnHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Font & Icons (Font Awesome) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #38bdf8;
+      --secondary: #a78bfa;
+      --accent: #2dd4bf;
+      --bg-deep: #050a15;
+      --bg-card: rgba(12, 20, 35, 0.7);
+      --glass-edge: rgba(56, 189, 248, 0.15);
+      --text-main: #ffffff;
+      --text-muted: #9bb0cc;
+      --input-bg: rgba(255, 255, 255, 0.04);
+      --social-hover: rgba(56, 189, 248, 0.1);
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-deep);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* --- premium floating orbs (refined) --- */
+    .orb {
+      position: fixed;
+      width: 90vmax;
+      height: 90vmax;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(56, 189, 248, 0.2), transparent 70%),
+                  radial-gradient(circle at 70% 80%, rgba(167, 139, 250, 0.15), transparent 70%);
+      filter: blur(120px);
+      opacity: 0.4;
+      z-index: -2;
+      animation: orbFloat 22s infinite alternate ease-in-out;
+      pointer-events: none;
+    }
+    .orb-1 {
+      top: -20%;
+      left: -15%;
+      background: radial-gradient(circle, #38bdf8 0%, #2dd4bf80 70%);
+    }
+    .orb-2 {
+      bottom: -15%;
+      right: -15%;
+      background: radial-gradient(circle, #a78bfa 0%, #818cf880 70%);
+      animation-delay: -8s;
+    }
+    @keyframes orbFloat {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(5%, 8%) scale(1.1); }
+    }
+
+    /* subtle noise texture */
+    .noise {
+      position: fixed;
+      inset: 0;
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc0IiBudW1PY3RhdmVzPSIzIiAvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNmKSIgb3BhY2l0eT0iMC4wMjUiIC8+PC9zdmc+');
+      opacity: 0.25;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* header glass premium */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(5, 10, 21, 0.7);
+      backdrop-filter: blur(14px) saturate(200%);
+      -webkit-backdrop-filter: blur(14px) saturate(200%);
+      padding: 1rem 5vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+      box-shadow: 0 20px 40px -20px #000000;
+    }
+
+    .logo {
+      font-size: 1.9rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(145deg, #ffffff, #cbd5e1, #38bdf8, #a78bfa);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo i {
+      background: linear-gradient(145deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-size: 2.2rem;
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    nav a {
+      color: #b0c6dd;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: 0.2s;
+      border-bottom: 1px solid transparent;
+      padding-bottom: 4px;
+    }
+    nav a:hover {
+      color: white;
+      border-bottom-color: var(--primary);
+    }
+
+    /* --- main login container (elevated) --- */
+    .login-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+    }
+
+    .login-card {
+      background: rgba(8, 16, 30, 0.7);
+      backdrop-filter: blur(16px) saturate(200%);
+      -webkit-backdrop-filter: blur(16px) saturate(200%);
+      border: 1px solid rgba(56, 189, 248, 0.18);
+      border-radius: 2.5rem;
+      padding: 3rem 2.5rem;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 40px 70px -20px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(56, 189, 248, 0.1) inset;
+      transition: transform 0.3s ease;
+      animation: cardAppear 0.9s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+    }
+
+    @keyframes cardAppear {
+      0% { opacity: 0; transform: scale(0.96) translateY(20px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* header inside card */
+    .login-header {
+      text-align: left;
+      margin-bottom: 2rem;
+    }
+    .login-header h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(145deg, #ffffff, #d9e2ef);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 0.5rem;
+    }
+    .login-header p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      border-left: 3px solid var(--primary);
+      padding-left: 1rem;
+    }
+
+    /* --- social grid (apple, google, linkedin) --- */
+    .social-grid {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .social-btn {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(56, 189, 248, 0.15);
+      backdrop-filter: blur(8px);
+      padding: 0.9rem 0;
+      border-radius: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: white;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .social-btn i {
+      font-size: 1.2rem;
+    }
+    .social-btn:hover {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--primary);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px -10px #38bdf8;
+    }
+    .btn-apple i { color: #ffffff; } 
+    .btn-google i { color: #fc6d4c; } 
+    .btn-linkedin i { color: #0a66c2; }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: #62748c;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 1.8rem 0;
+    }
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    .divider span {
+      margin: 0 1rem;
+    }
+
+    /* form */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #bfd2ec;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.2px;
+    }
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-wrapper i {
+      position: absolute;
+      left: 1.2rem;
+      color: #4f688b;
+      font-size: 1.1rem;
+    }
+    .input-wrapper input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 40px;
+      padding: 1rem 1rem 1rem 3rem;
+      color: white;
+      font-size: 1rem;
+      font-weight: 400;
+      backdrop-filter: blur(5px);
+      transition: 0.2s;
+    }
+    .input-wrapper input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(20, 40, 60, 0.6);
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1);
+    }
+    .input-wrapper input::placeholder {
+      color: #506480;
+      font-weight: 300;
+    }
+
+    /* remember & forgot */
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 1rem 0 2rem;
+      font-size: 0.9rem;
+    }
+    .checkbox {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #b6c9e5;
+    }
+    .checkbox input {
+      width: 1.1rem;
+      height: 1.1rem;
+      accent-color: var(--primary);
+      border-radius: 4px;
+    }
+    .forgot-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      border-bottom: 1px dashed rgba(56,189,248,0.4);
+    }
+    .forgot-link:hover {
+      color: white;
+      border-bottom-color: white;
+    }
+
+    /* login button premium */
+    .btn-login {
+      width: 100%;
+      background: linear-gradient(145deg, #38bdf8, #8b5cf6, #38bdf8);
+      background-size: 200% auto;
+      border: none;
+      padding: 1.1rem;
+      border-radius: 60px;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: 0.4s;
+      box-shadow: 0 20px 30px -10px #1e3b5a;
+      margin-bottom: 1.8rem;
+    }
+    .btn-login:hover {
+      background-position: right center;
+      transform: scale(1.02) translateY(-3px);
+      box-shadow: 0 30px 40px -12px #38bdf8;
+    }
+
+    .signup-cta {
+      text-align: center;
+      color: #8098b5;
+      font-size: 0.95rem;
+    }
+    .signup-cta a {
+      color: white;
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 1px solid var(--primary);
+    }
+    .signup-cta a:hover {
+      color: var(--primary);
+    }
+
+    /* security note */
+    .security-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      color: #4d688b;
+    }
+    .security-note i {
+      color: #2dd4bf;
+    }
+
+    /* footer */
+    footer {
+      padding: 2rem 5vw;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(56, 189, 248, 0.1);
+      background: rgba(5, 10, 21, 0.5);
+      backdrop-filter: blur(8px);
+      color: #60758e;
+      font-size: 0.9rem;
+    }
+    .footer-links a {
+      color: #859fb2;
+      text-decoration: none;
+      margin-left: 2rem;
+      transition: 0.2s;
+    }
+    .footer-links a:hover {
+      color: white;
+    }
+
+    /* responsiveness */
+    @media (max-width: 500px) {
+      .login-card { padding: 2rem 1.5rem; }
+      .social-grid { flex-direction: column; }
+      header { flex-direction: column; gap: 0.8rem; }
+      nav { gap: 1rem; }
+      .footer-links a { margin-left: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="noise"></div>
+
+  <header>
+    <a href="index.html" class="logo"><i class="fas fa-graduation-cap"></i> S4learnHub</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html" style="color: white; border-bottom-color: var(--primary);">Login</a>
+    </nav>
+  </header>
+
+  <main class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <h2>🔐 welcome back</h2>
+        <p>sign in to continue your future-proof learning</p>
+      </div>
+
+      <!-- social login row (Apple, Google, LinkedIn) exactly as requested -->
+      <div class="social-grid">
+        <a href="#" class="social-btn btn-apple" aria-label="Sign in with Apple">
+          <i class="fab fa-apple"></i> Apple
+        </a>
+        <a href="#" class="social-btn btn-google" aria-label="Sign in with Google">
+          <i class="fab fa-google"></i> Google
+        </a>
+        <a href="#" class="social-btn btn-linkedin" aria-label="Sign in with LinkedIn">
+          <i class="fab fa-linkedin-in"></i> LinkedIn
+        </a>
+      </div>
+
+      <div class="divider">
+        <span>or continue with email</span>
+      </div>
+
+      <!-- login form -->
+      <form>
+        <div class="form-group">
+          <label>Email address</label>
+          <div class="input-wrapper">
+            <i class="far fa-envelope"></i>
+            <input type="email" placeholder="name@domain.com" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <div class="input-wrapper">
+            <i class="fas fa-lock"></i>
+            <input type="password" placeholder="••••••••" required>
+          </div>
+        </div>
+
+        <div class="form-options">
+          <label class="checkbox">
+            <input type="checkbox" checked> Keep me signed in
+          </label>
+          <a href="#" class="forgot-link">forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn-login">
+          <i class="fas fa-arrow-right-to-bracket"></i> Log in to dashboard
+        </button>
+      </form>
+
+      <div class="signup-cta">
+        Don’t have an account? <a href="signup.html">Join S4learnHub now →</a>
+      </div>
+
+      <div class="security-note">
+        <i class="fas fa-shield-halved"></i> enterprise‑grade encryption · sso ready
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div>© 2026 S4learnHub, Inc. — learn without limits</div>
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Security</a>
+      <a href="#"><i class="fab fa-discord"></i></a>
+      <a href="#"><i class="fab fa-x-twitter"></i></a>
+    </div>
+  </footer>
+
+  <!-- tiny micro-interaction: focus on email field after load (cosmetic) -->
+  <script>
+    (function() {
+      // subtle dynamic greeting based on time (just for premium feel)
+      const headerTitle = document.querySelector('.login-header h2');
+      if (headerTitle) {
+        const hour = new Date().getHours();
+        let greeting = '🔐 welcome back';
+        if (hour < 12) greeting = '🌅 good morning';
+        else if (hour < 18) greeting = '☀️ good afternoon';
+        else greeting = '🌙 good evening';
+        headerTitle.innerHTML = `${greeting} · sign in`;
+      }
+    })();
+  </script>
+</body>
+</html>
